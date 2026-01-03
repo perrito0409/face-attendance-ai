@@ -72,18 +72,6 @@ Create and activate a virtual environment (recommended):
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-
-> No `.pth` files are used — inference is done fully with **ONNX + onnxruntime**, suitable for deployment.
-
----
-
-## ⚙️ Installation
-
-Create and activate a virtual environment (recommended):
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
 Install dependencies:
 pip install -r requirements.txt
 🚀 Usage
