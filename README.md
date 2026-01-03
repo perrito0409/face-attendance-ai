@@ -13,6 +13,8 @@ The system takes a face image as input and returns the most similar registered s
 
 ## 🧠 Architecture
 
+```
+
 Image
 ↓
 InsightFace (ONNX)
@@ -23,24 +25,30 @@ FAISS Index (cosine similarity)
 ↓
 Top-K matched student IDs
 
+```
+
 ---
 
 ## 📂 Project Structure
 
+```
+
 face-attendance-ai/
-├── assets/ # Sample images for testing
+├── assets/                 # Sample images for testing
 ├── index/
-│ ├── faiss.index # FAISS index (embedding database)
-│ └── labels.json # Mapping: vector → student_id
+│   ├── faiss.index         # FAISS index (embedding database)
+│   └── labels.json         # Mapping: vector → student_id
 ├── notebooks/
-│ └── 01_faiss_face_identification.ipynb
+│   └── 01_faiss_face_identification.ipynb
 ├── tests/
-│ ├── test_load_faiss.py
-│ └── test_recognizer.py
-├── face_pipeline.py # End-to-end image → result pipeline
-├── face_recognizer.py # Core FAISS search logic (backend-ready)
+│   ├── test_load_faiss.py
+│   └── test_recognizer.py
+├── face_pipeline.py        # End-to-end image → result pipeline
+├── face_recognizer.py      # Core FAISS search logic (backend-ready)
 ├── requirements.txt
 └── README.md
+
+```
 
 ---
 
@@ -54,12 +62,20 @@ This project uses **InsightFace `buffalo_l` ONNX models**:
 
 Models are automatically downloaded and cached at:
 
+```
+
 ~/.insightface/models/buffalo_l/
 
+```
+
 Example ONNX files:
+```
+
 det_10g.onnx
 w600k_r50.onnx
 genderage.onnx
+
+````
 
 > No `.pth` files are used — inference is done fully with **ONNX + onnxruntime**, suitable for deployment.
 
@@ -72,13 +88,27 @@ Create and activate a virtual environment (recommended):
 ```bash
 python3 -m venv venv
 source venv/bin/activate
+````
 
 Install dependencies:
+
+```bash
 pip install -r requirements.txt
-🚀 Usage
-1️⃣ Run Face Recognition Pipeline
+```
+
+---
+
+## 🚀 Usage
+
+### 1️⃣ Run Face Recognition Pipeline
+
+```bash
 python face_pipeline.py assets/query.jpg
-Example Output
+```
+
+### Example Output
+
+```json
 {
   "accept": true,
   "best_id": "SV01",
@@ -89,37 +119,49 @@ Example Output
     { "student_id": "SV03", "score": 0.25 }
   ]
 }
-🧪 Testing
-Test FAISS index loading
+```
+
+---
+
+## 🧪 Testing
+
+### Test FAISS index loading
+
+```bash
 python tests/test_load_faiss.py
-Test recognizer logic
+```
+
+### Test recognizer logic
+
+```bash
 PYTHONPATH=. python tests/test_recognizer.py
-🏗️ Design Notes
+```
 
-FAISS uses cosine similarity (IndexFlatIP with normalized vectors)
+---
 
-One person can have multiple embeddings
+## 🏗️ Design Notes
 
-Decision is based on:
+* FAISS uses **cosine similarity** (`IndexFlatIP` with normalized vectors)
+* One person can have **multiple embeddings**
+* Decision is based on:
 
-best similarity score
+  * best similarity score
+  * configurable threshold
+* Backend can call `FaceRecognizer.search()` directly
 
-configurable threshold
+---
 
-Backend can call FaceRecognizer.search() directly
+## 🔮 Future Work
 
-🔮 Future Work
+* Integrate with FastAPI / Flask backend
+* Store embeddings & metadata in database (Supabase / PostgreSQL)
+* Add liveness detection (blink / motion)
+* Support online index update
 
-Integrate with FastAPI / Flask backend
+---
 
-Store embeddings & metadata in database (Supabase / PostgreSQL)
+## 👤 Author
 
-Add liveness detection (blink / motion)
-
-Support online index update
-
-👤 Author
-
-Dat Tran
+**Dat Tran**
 Face Attendance AI – Prototype for backend integration
 
